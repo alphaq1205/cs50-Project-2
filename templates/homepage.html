@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="../static/css/homepage.css"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js" integrity="sha256-bQmrZe4yPnQrLTY+1gYylfNMBuGfnT/HKsCGX+9Xuqo=" crossorigin="anonymous"></script>
+  </head>
+  <body>
+    <div class="homepage">
+        <nav class="navbar navbar-dark bg-dark">
+                <input type="text" placeholder="Chose Your Channel Name" value="" id="u_channel" name="username"/>
+                <button id="but-one" onclick="create_channel()"> Create Channel</button>
+              
+                <p id="usname">USERNAME</p>
+            <form id="logout" action="{{url_for('index')}}">
+                <button  class="btn btn-primary" > LOGOUT</button>
+            </form>
+        </nav>
+        <div class="chnl_lst">
+            <section id="main">
+                <p id="usname">CHANNELS</p>
+<!-- *************CHANNELS LIST***************************   -->
+                <ul id="channels">
+                
+                </ul>
+            </section>
+        </div>
+
+        <div class="msg_box">
+            <aside id="sidebar">
+                <div id="scroll">
+<!-- ***********************CHAT DATA*********************** -->
+                    <ul id="mail_ul">
+                      
+                    </ul>
+                </div>
+                <div class="search_boc">
+                  
+                    <input type="text" placeholder="Message" value="" id="u_msg" name="message"/>
+                    <button onclick="snd_msg()"> Send </button>
+                  
+                </div>
+            </aside>
+        </div>
+  </body>
+</html>
+
+
+<script>
+
+  let l_uname=localStorage.getItem('username')
+
+//*******************************LOGOUT AND USERNAME*********************************************
+
+  document.addEventListener('DOMContentLoaded', function() {
+    if(l_uname){
+      let username = document.querySelector('#usname')
+      username.innerHTML = l_uname
+    }
+    document.querySelector('#logout').onsubmit =function(){
+      localStorage.clear()
+    }
+
+//******************************CREATE CHANNEL*****************************************************
+
+  let chnlData
+    const request = new XMLHttpRequest()
+    const proxyurl = "https://cors-anywhere.herokuapp.com/"
+    request.open('GET', 'http://127.0.0.1:5000/api/channels')
+    request.onload = () => {
+      const data = JSON.parse(request.responseText)  
+      chnlData=data.data
+      for(let x of chnlData){
+          if(x.chnlName != null){
+              let li = document.createElement('li')
+              let a = document.createElement('a')
+              li.innerHTML = '<button id='+x.chnlName+' onclick=test(this.id)>'+x.chnlName+'</button>'
+              let element = document.getElementById('channels').append(li)
+          }
+        }
+    }
+    request.send()
+    
+          
+  create_channel=()=>{
+      let chnl_name = document.querySelector('#u_channel').value
+      let channelName=chnl_name
+      let chnl_verification=false
+
+      for(let chData of chnlData){
+        if(channelName == chData.chnlName){
+            chnl_verification = true
+            console.log('This name already exist choose another name for channel')
+            break
+        }
+      }
+
+      if(chnl_verification == false){
+          if(channelName == ''){
+              alert('choose any name of channel')
+          }else{
+              const request = new XMLHttpRequest()
+              const proxyurl = "https://cors-anywhere.herokuapp.com/"
+              request.open('POST', 'http://127.0.0.1:5000/api/channels')
+              request.onload = () => {
+                  const responseData = JSON.parse(request.responseText)  
+                  chnlData=responseData.data
+                }
+              const data = new FormData()
+              data.append('chnl_name', chnl_name)
+              data.append('creator_name', l_uname)
+              request.send(data)
+            
+              let li = document.createElement('li')
+              li.innerHTML = '<button id='+chnl_name+' onclick=test(this.id)>'+chnl_name+'</button>'
+              let element = document.getElementById('channels').append(li)
+          }
+      }else{
+          alert('This channel name is already registered choose another name')
+      }
+  }
+
+
+//**********************************CHANNEL CHATS**************************************************
+
+
+  let previousChnl = JSON.stringify(localStorage.getItem('currentChannel'))
+  if(previousChnl !== null){
+    console.log(previousChnl+'}}}}}}}}}}}}}}}}}}}}}}}]')
+      let request = new XMLHttpRequest()
+            let proxyurl = "https://cors-anywhere.herokuapp.com/"
+            request.open('GET', 'http://127.0.0.1:5000/api/message/'+previousChnl)
+            request.onload = () => {
+                const responseData = JSON.parse(request.responseText)  
+                msgData=responseData.messageData
+                console.log('this is the messages of channels:- '+JSON.stringify(msgData))
+  
+                for(let mdata of msgData){
+                  
+                    if(mdata.channel == JSON.parse(previousChnl)){
+                        let li = document.createElement('li')
+                        let para1 = document.createElement('p')
+                        para1.innerHTML = mdata.username+' <span>'+mdata.hour+':'+mdata.minutes+'   '+mdata.channel+'</span><br/>'+mdata.msg+ '</p>'
+                        li.append(para1)
+                          if(mdata.username == l_uname){
+                            li.id = 'one'
+                            li.classList.add(mdata.channel)
+                          }else{
+                            li.id = 'two'
+                            li.classList.add(mdata.channel)
+                          }
+
+                    li.setAttribute('class', mdata.channel)
+                    let element = document.getElementById('mail_ul').append(li)
+                  }
+                } 
+            }
+            request.send()
+      }else{
+        alert('you have to select a channel')
+      }
+
+  filter=()=>{
+      let chFilter = document.querySelector('#mail_ul')
+          chFilter.innerHTML = ''
+  }
+
+
+  fetch=()=>{
+        let request = new XMLHttpRequest()
+        let proxyurl = "https://cors-anywhere.herokuapp.com/"
+        request.open('GET', 'http://127.0.0.1:5000/api/message/'+chnName)
+        request.onload = () => {
+            const responseData = JSON.parse(request.responseText)  
+            msgData=responseData.messageData
+            console.log('this is the messages of channels:- '+JSON.stringify(msgData))
+            localchnl = localStorage.getItem('currentChannel')
+
+            for(let mdata of msgData){
+            console.log(localchnl)
+                if(mdata.channel == localchnl){
+                    let li = document.createElement('li')
+                    let para1 = document.createElement('p')
+                    para1.innerHTML = mdata.username+' <span>'+mdata.hour+':'+mdata.minutes+'   '+mdata.channel+'</span><br/>'+mdata.msg+ '</p>'
+                    li.append(para1)
+                      if(mdata.username == l_uname){
+                        li.id = 'one'
+                        li.classList.add(mdata.channel)
+                      }else{
+                        li.id = 'two'
+                        li.classList.add(mdata.channel)
+                      }
+
+                li.setAttribute('class', mdata.channel)
+                let element = document.getElementById('mail_ul').append(li)
+              }
+            } 
+        }
+        request.send()
+    }
+
+
+  test=(data)=>{
+      localStorage.setItem('currentChannel',data)
+      chnName = JSON.stringify(data)    
+      console.log(typeof(chnName)+' This is data')
+      filter()
+      fetch()
+    }
+
+
+//**********************************SENDING MESSAGE*************************************************
+
+
+  let socket = io.connect('http://127.0.0.1:5000/')
+  let chname = localStorage.getItem('currentChannel')
+
+  socket.on('fetchChat', data => {
+      let li = document.createElement('li')
+      let para1 = document.createElement('p')
+      para1.innerHTML = data.username+' <span>'+data.hour+':'+data.minutes+'</span><br/>'+data.msg+ '</p>'
+      li.append(para1)
+      if(data.username == l_uname){
+          li.id = 'one'
+        }else{
+          li.id = 'two'
+        }
+      li.setAttribute('class', chname)
+      let element = document.getElementById('mail_ul').append(li)
+
+    })
+
+
+  socket.on('connect', () => {
+    snd_msg=()=>{
+          let channel = localStorage.getItem('currentChannel')
+          let msge = document.querySelector('#u_msg').value
+          let d = new Date()
+          let hour = d.getHours()
+          let minutes = d.getMinutes()
+        
+          let chatData={
+            'msg':msge,
+            'username':l_uname,
+            'channel':channel,
+            'hour':hour,
+            'minutes':minutes
+          }
+
+          socket.emit('getChat', {'chatData': chatData})
+          console.log('data sent')
+        }
+    })
+
+})
+
+</script>

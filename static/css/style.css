@@ -1,0 +1,182 @@
+*{
+  margin: 0;
+  padding: 0;
+  
+}
+
+body{
+  background-color: rgb(53, 52, 52);
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 16px;
+  font-weight: normal; 
+  line-height: 1.6em;
+  margin:50px;
+
+}
+
+/* *************************************************FRONT-PAGE***************************************************************** */
+
+.front{
+  text-align: center;
+  margin: 200px;
+  color: white;
+}
+
+.front h1{
+  font-size: 50px;
+  color: thistle;
+}
+
+.front h2{
+  margin-top: 50px;
+  font-size: 32px;
+}
+
+
+.front button{
+  margin-top: 80px;
+  margin-left: 40%;
+  padding: 10px 80px;
+  border: 1px solid red;
+  background-color: rgb(53, 52, 52);
+}
+
+.front a{
+  color: #fff;
+  text-decoration: none;
+  font-size: 20px;
+}
+
+.front a:hover{
+  color: red;
+}
+
+.front button{
+  color: #fff;
+  text-decoration: none;
+}
+
+.front p{
+  margin-top: 20px;
+  font-size: 20px;
+  text-align: left;
+}
+
+
+/* ****************************************************REGISTRATION-PAGE*************************************************** */
+
+.register{
+text-align: center;
+margin: 200px;
+color: white;
+
+}
+
+
+
+
+#regForm{
+width: 500px;
+height: 300px;
+border: 1px skyblue solid;
+border-radius: 20px;
+padding: 30px;
+margin-left: 25%;
+}
+
+.register h2{
+font-size: 40px;
+  color: thistle;
+}
+
+.register label{
+margin-top: 20px;
+font-size: 30px;
+color: antiquewhite;
+}
+
+.register input{
+margin: 20px;
+width: 400px;
+height: 40px;
+border: 1px skyblue solid;
+border-radius: 3px;
+background-color: rgb(53, 52, 52);
+}
+
+.register button{
+padding: 10px 80px;
+margin-top: 20px;
+margin-left: 82px;
+border: 1px solid red;
+background-color: rgb(53, 52, 52);
+}
+
+#but-one{
+margin-right: 1000px;
+}
+
+.register a{
+color: #fff;
+text-decoration: none;
+font-size: 20px;
+}
+
+.register a:hover{
+color: red;
+}
+
+
+/* *************************************************HOMEPAGE*********************************************************************** */
+
+
+/*
+.homepage{
+color: white;
+}
+
+.homepage ul{
+padding: 0;
+list-style-type: none;
+}
+
+
+.chnl_lst{
+
+float: left;
+color: red;
+padding-right: 1000px;
+}
+
+.chnl_lst ul{
+padding: 0;
+background-color: rgb(63, 60, 60);
+}
+
+
+.chnl_lst li{
+
+margin-bottom: 20px;
+
+width:80px;
+height: 80px;
+border: 1px red solid;
+border-radius: 100px;
+padding: 20px;
+}
+
+.chnl_lst a{
+color: #fff;
+text-decoration: none;
+font-size: 17px;
+}
+
+.chnl_lst a:hover{
+color: red;
+}
+
+.msg_box{
+
+}
+
+*/

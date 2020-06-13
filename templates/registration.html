@@ -1,0 +1,41 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="../static/css/style.css"/>
+    
+  </head>
+  <body>
+    <div class="register">
+      <h2>REGISTER  USERNAME</h2>
+      <form id="regForm" action="{{url_for('home')}}">
+       <label>Choose Username</label><br/>
+       <input type="text" placeholder="Chose your username"  name="username" id="u_name"/><br/>
+       <button id="but-one" type="submit">Create_User</button>
+      </form>
+
+    </div>
+
+  </body>
+</html>
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+                document.querySelector('#regForm').onsubmit = function() {
+                let frmAction = document.getElementById('regForm')
+                let username = document.getElementById('u_name').value
+                 if(username == ''){
+                  frmAction.action = "{{url_for('register')}}"
+                   alert('please choose any signature name')
+                 }else{
+                  alert('helo '+username)
+                    localStorage.setItem('username', username);
+                 }
+                    
+                }
+            })
+
+  
+  </script>
